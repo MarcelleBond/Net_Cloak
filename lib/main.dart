@@ -1,12 +1,25 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import 'data/store.dart';
+import 'providers/providers.dart';
 import 'screens/screens.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  await Store.init();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        // ChangeNotifierProvider(create: (context) => MovieProvider()),
+        // ChangeNotifierProvider(create: (context) => WhatchlistProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,11 +29,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Net Cloak',
-      theme: FlexThemeData.light(scheme: FlexScheme.blueWhale, textTheme: GoogleFonts.montserratTextTheme()),
-      darkTheme: FlexThemeData.dark(scheme: FlexScheme.blueWhale, textTheme: GoogleFonts.montserratTextTheme()),
-      themeMode: ThemeMode.light,
+      debugShowCheckedModeBanner: false,
+      theme: FlexThemeData.light(
+        scheme: FlexScheme.blueM3,
+        textTheme: GoogleFonts.montserratTextTheme(),
+      ),
+      darkTheme: FlexThemeData.dark(
+        scheme: FlexScheme.blueM3,
+        textTheme: GoogleFonts.montserratTextTheme(),
+        
+      ),
+      themeMode: context.watch<ThemeProvider>().isDarkMode
+          ? ThemeMode.dark
+          : ThemeMode.light,
       home: const HomeScreen(),
     );
   }
 }
-

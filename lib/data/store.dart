@@ -11,31 +11,29 @@ class Store {
 
   Store._internal();
 
-  Future<void> _insert(Map<String, dynamic> data) async {
-    _prefs ??= await SharedPreferences.getInstance();
+  Future<void> _init() async =>
+      _prefs ??= await SharedPreferences.getInstance();
 
+  Future<void> _insert(Map<String, dynamic> data) async {
     data.forEach((key, value) {
       _prefs?.setString(key, value.toString());
     });
   }
-  
-   Future<void> _set(String key, dynamic value) async {
-    _prefs ??= await SharedPreferences.getInstance();
 
+  Future<void> _set(String key, dynamic value) async {
     Map<String, dynamic> data = {
       "value": value,
       "type": "${value.runtimeType}",
     };
 
-    _prefs?.setString(key, json.encode(data));    
+    await _prefs?.setString(key, json.encode(data));
   }
 
-  Future<dynamic> _get(String key) async {
-    _prefs ??= await SharedPreferences.getInstance();
+  dynamic _get(String key) {
+    Map<String, dynamic> data = json
+        .decode(_prefs?.getString(key) ?? "{\"type\":\"Null\",\"value\":null}");
 
-    Map<String, dynamic> data = json.decode(_prefs?.getString(key) ?? "{\"type\":\"Null\",\"value\":null}");
-
-    switch(data["type"]) {
+    switch (data["type"]) {
       case "String":
         return data["value"];
       case "int":
@@ -50,12 +48,14 @@ class Store {
   }
 
   Future<void> _remove(String key) async {
-    _prefs ??= await SharedPreferences.getInstance();
-    _prefs?.remove(key);
+    await _prefs?.remove(key);
   }
 
-  static Future<void> insert(Map<String, dynamic> data) async => _instance._insert(data);
-  static Future<void> set(String key, dynamic value) async => Store._instance._set(key, value);
-  static Future<dynamic> get(String key) async => Store._instance._get(key);
+  static Future<void> init() async => _instance._init();
+  static Future<void> insert(Map<String, dynamic> data) async =>
+      _instance._insert(data);
+  static Future<void> set(String key, dynamic value) async =>
+      Store._instance._set(key, value);
+  static dynamic get(String key) => Store._instance._get(key);
   static Future<void> remove(String key) async => Store._instance._remove(key);
 }
