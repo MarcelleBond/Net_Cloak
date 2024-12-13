@@ -1,25 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class VpnStatus {
+class VpnStatusV2 {
   String byteIn;
   String byteOut;
   String durationTime;
   String lastPacketReceive;
-  VpnStatus({
+  VpnStatusV2({
     required this.byteIn,
     required this.byteOut,
     required this.durationTime,
     required this.lastPacketReceive,
   });
 
-  VpnStatus copyWith({
+  VpnStatusV2 copyWith({
     String? byteIn,
     String? byteOut,
     String? durationTime,
     String? lastPacketRecive,
   }) {
-    return VpnStatus(
+    return VpnStatusV2(
       byteIn: byteIn ?? this.byteIn,
       byteOut: byteOut ?? this.byteOut,
       durationTime: durationTime ?? this.durationTime,
@@ -36,8 +36,8 @@ class VpnStatus {
     };
   }
 
-  factory VpnStatus.fromMap(Map<String, dynamic> map) {
-    return VpnStatus(
+  factory VpnStatusV2.fromMap(Map<String, dynamic> map) {
+    return VpnStatusV2(
       byteIn: map['byte_in'] as String,
       byteOut: map['byte_out'] as String,
       durationTime: map['duration'] as String,
@@ -47,15 +47,15 @@ class VpnStatus {
 
   String toJson() => json.encode(toMap());
 
-  factory VpnStatus.fromJson(String source) => VpnStatus.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory VpnStatusV2.fromJson(String source) => VpnStatusV2.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'VpnStatus(byteIn: $byteIn, byteOut: $byteOut, durationTime: $durationTime, lastPacketRecive: $lastPacketReceive)';
+    return 'VpnStatusV2(byteIn: $byteIn, byteOut: $byteOut, durationTime: $durationTime, lastPacketRecive: $lastPacketReceive)';
   }
 
   @override
-  bool operator ==(covariant VpnStatus other) {
+  bool operator ==(covariant VpnStatusV2 other) {
     if (identical(this, other)) return true;
   
     return 
